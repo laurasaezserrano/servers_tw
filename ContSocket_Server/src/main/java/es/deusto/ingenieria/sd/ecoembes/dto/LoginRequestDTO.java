@@ -1,0 +1,35 @@
+package es.deusto.ingenieria.sd.ecoembes.dto;
+
+public class LoginRequestDTO {
+
+    private String email;
+    private String password;
+
+    //CONSTRUCTOR
+    public LoginRequestDTO() {
+    }
+
+    public LoginRequestDTO(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    //GETTERS AND SETTERS
+    //Email
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    //Password
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
