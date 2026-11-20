@@ -77,4 +77,8 @@ application-local.yml
 /PlasSB_Server/bin/
 /PlasSB_Server/build/
 /PlasSB_Server/.classpath
+<<<<<<< HEAD
 /PlasSB_Server/.project
+=======
+/PlasSB_Server/.project
+>>>>>>> branch 'main' of https://github.com/laurasaezserrano/servers_tw.git
