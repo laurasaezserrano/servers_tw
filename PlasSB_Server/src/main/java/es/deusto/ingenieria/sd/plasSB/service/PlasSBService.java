@@ -21,8 +21,6 @@ public class PlasSBService {
 		this.capacityRepository = capacityRepository;
 		this.notificationRepository = notificationRepository;
 	}
-	
-	
 
 	public Optional<CapacityDTO> getCapacity(LocalDate date) {
 		return capacityRepository.findByDate(date)
