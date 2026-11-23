@@ -18,11 +18,6 @@ public class PlasSBService {
 	private final CapacityRepository capacityRepository;
 	private final NotificationRepository notificationRepository;
 	
-	
-	public PlasSBService() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	public PlasSBService(CapacityRepository capacityRepository, NotificationRepository notificationRepository) {
 		this.capacityRepository = capacityRepository;
 		this.notificationRepository = notificationRepository;

@@ -5,15 +5,15 @@ import java.time.LocalDate;
 public class Capacity {
     private Long id;
     private LocalDate date;
-    private double capacityTons;
+    private double capacity;
     
     public Capacity() {
 	}
     
-    public Capacity(Long id, LocalDate date, double capacityTons) {
+    public Capacity(Long id, LocalDate date, double capacity) {
 		this.id = id;
 		this.date = date;
-		this.capacityTons = capacityTons;
+		this.capacity = capacity;
 	}
     
 	public Long getId() {
@@ -32,12 +32,12 @@ public class Capacity {
 		this.date = date;
 	}
 
-	public double getCapacityTons() {
-		return capacityTons;
+	public double getCapacity() {
+		return capacity;
 	}
 
-	public void setCapacityTons(double capacityTons) {
-		this.capacityTons = capacityTons;
+	public void setCapacityTons(double capacity) {
+		this.capacity = capacity;
 	}
     
 
