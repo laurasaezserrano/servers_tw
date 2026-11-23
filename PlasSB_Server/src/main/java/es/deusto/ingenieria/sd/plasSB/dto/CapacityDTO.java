@@ -4,30 +4,30 @@ import java.time.LocalDate;
 
 public class CapacityDTO {
 	private LocalDate date;
-    private double capacityTons; 
+    private double capacity; 
     
-    public CapacityDTO(LocalDate date, double capacityTons) {
+    public CapacityDTO(LocalDate date, double capacity) {
 		this.date = date;
-		this.capacityTons = capacityTons;
+		this.capacity = capacity;
 	}
     
     public LocalDate getDate() {
 		return date;
 	}
     	
-    public double getCapacityTons() {
-		return capacityTons;
+    public double getCapacity() {
+		return capacity;
 	}
     
     public void setDate(LocalDate date) {
   		this.date = date;
     }
     
-    public void setCapacityTons(double capacityTons) {
-    	this.capacityTons = capacityTons;
+    public void setCapacity(double capacity) {
+    	this.capacity = capacity;
     }
     
     public String toString() {
-		return "CapacityDTO [date=" + date + ", capacityTons=" + capacityTons + "]";
+		return "CapacityDTO [date=" + date + ", capacity=" + capacity + "]";
 	}
 }

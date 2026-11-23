@@ -1,13 +1,24 @@
 package es.deusto.ingenieria.sd.plasSB.entity;
 
+import java.time.LocalDate;
+
 public class Notification {
 	private Long id;
-	private String date;
+	private LocalDate date;
 	private int numDumpsters;
 	private int totalContainers;
 	
-	public Notification(Long id, String date, int numDumpsters, int totalContainers) {
+	public Notification() {
+	}
+	
+	public Notification(Long id, LocalDate date, int numDumpsters, int totalContainers) {
 		this.id = id;
+		this.date = date;
+		this.numDumpsters = numDumpsters;
+		this.totalContainers = totalContainers;
+	}
+	
+	public Notification(LocalDate date, int numDumpsters, int totalContainers) {
 		this.date = date;
 		this.numDumpsters = numDumpsters;
 		this.totalContainers = totalContainers;
@@ -21,11 +32,11 @@ public class Notification {
 		this.id = id;
 	}
 
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

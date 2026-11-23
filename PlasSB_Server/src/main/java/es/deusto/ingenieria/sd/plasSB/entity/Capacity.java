@@ -7,6 +7,9 @@ public class Capacity {
     private LocalDate date;
     private double capacityTons;
     
+    public Capacity() {
+	}
+    
     public Capacity(Long id, LocalDate date, double capacityTons) {
 		this.id = id;
 		this.date = date;
