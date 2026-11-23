@@ -1,4 +1,4 @@
-package es.deusto.ingenieria.sd.ecoembes.dto;
+package es.deusto.ingenieria.sd.plasSB.dto;
 
 public class LoginResponseDTO {
 

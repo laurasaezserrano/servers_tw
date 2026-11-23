@@ -1,4 +1,4 @@
-package es.deusto.ingenieria.sd.ecoembes.service;
+package es.deusto.ingenieria.sd.plasSB.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import es.deusto.ingenieria.sd.ecoembes.entity.Assignment;
-import es.deusto.ingenieria.sd.ecoembes.entity.Dumpster;
-import es.deusto.ingenieria.sd.ecoembes.entity.Employee;
-import es.deusto.ingenieria.sd.ecoembes.entity.RecyclingPlant;
+import es.deusto.ingenieria.sd.plasSB.entity.Assignment;
+import es.deusto.ingenieria.sd.plasSB.entity.Dumpster;
+import es.deusto.ingenieria.sd.plasSB.entity.Employee;
+import es.deusto.ingenieria.sd.plasSB.entity.RecyclingPlant;
 
 @Service
 public class AssignmentService {

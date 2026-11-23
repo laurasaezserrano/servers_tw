@@ -1,4 +1,4 @@
-package es.deusto.ingenieria.sd.ecoembes.service;
+package es.deusto.ingenieria.sd.plasSB.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import es.deusto.ingenieria.sd.ecoembes.dto.RecyclingPlantDTO;
-import es.deusto.ingenieria.sd.ecoembes.entity.RecyclingPlant;
+import es.deusto.ingenieria.sd.plasSB.dto.RecyclingPlantDTO;
+import es.deusto.ingenieria.sd.plasSB.entity.RecyclingPlant;
 
 @Service
 public class RecyclingPlantService {

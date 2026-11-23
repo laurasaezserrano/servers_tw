@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import es.deusto.ingenieria.sd.ecoembes.dto.LoginRequestDTO;
-import es.deusto.ingenieria.sd.ecoembes.service.AuthService;
+import es.deusto.ingenieria.sd.plasSB.dto.LoginRequestDTO;
+import es.deusto.ingenieria.sd.plasSB.service.AuthService;
 import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

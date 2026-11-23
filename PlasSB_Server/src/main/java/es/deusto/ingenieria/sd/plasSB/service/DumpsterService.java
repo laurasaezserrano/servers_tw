@@ -1,4 +1,4 @@
-package es.deusto.ingenieria.sd.ecoembes.service;
+package es.deusto.ingenieria.sd.plasSB.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,14 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterCreationDTO;
-//import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterCreationDTO;
-import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterDTO;
-//import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterUpdateDTO;
-import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterUsageDTO;
-import es.deusto.ingenieria.sd.ecoembes.entity.Dumpster;
-import es.deusto.ingenieria.sd.ecoembes.entity.DumpsterUsage;
-import es.deusto.ingenieria.sd.ecoembes.entity.FillLevel;
+import es.deusto.ingenieria.sd.plasSB.dto.DumpsterCreationDTO;
+import es.deusto.ingenieria.sd.plasSB.dto.DumpsterDTO;
+import es.deusto.ingenieria.sd.plasSB.dto.DumpsterUsageDTO;
+import es.deusto.ingenieria.sd.plasSB.entity.Dumpster;
+import es.deusto.ingenieria.sd.plasSB.entity.DumpsterUsage;
+import es.deusto.ingenieria.sd.plasSB.entity.FillLevel;
 
 @Service
 public class DumpsterService {

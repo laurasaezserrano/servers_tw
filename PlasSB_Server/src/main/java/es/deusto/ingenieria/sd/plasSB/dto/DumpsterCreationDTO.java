@@ -1,6 +1,6 @@
-package es.deusto.ingenieria.sd.ecoembes.dto;
+package es.deusto.ingenieria.sd.plasSB.dto;
 
-import es.deusto.ingenieria.sd.ecoembes.entity.FillLevel;
+import es.deusto.ingenieria.sd.plasSB.entity.FillLevel;
 
 public class DumpsterCreationDTO {
 	private String location;

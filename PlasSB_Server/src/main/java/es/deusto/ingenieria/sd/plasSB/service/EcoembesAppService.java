@@ -1,12 +1,12 @@
-package es.deusto.ingenieria.sd.ecoembes.service;
+package es.deusto.ingenieria.sd.plasSB.service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import es.deusto.ingenieria.sd.ecoembes.dto.LoginRequestDTO;
-import es.deusto.ingenieria.sd.ecoembes.dto.LoginResponseDTO;
+import es.deusto.ingenieria.sd.plasSB.dto.LoginRequestDTO;
+import es.deusto.ingenieria.sd.plasSB.dto.LoginResponseDTO;
 
 @Service
 public class EcoembesAppService {

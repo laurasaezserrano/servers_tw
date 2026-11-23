@@ -1,4 +1,4 @@
-package es.deusto.ingenieria.sd.ecoembes.entity;
+package es.deusto.ingenieria.sd.plasSB.entity;
 
 public enum FillLevel {
 	GREEN,   // almost empty
