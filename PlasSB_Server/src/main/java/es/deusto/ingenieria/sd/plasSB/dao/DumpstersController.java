@@ -1,4 +1,4 @@
-package es.deusto.ingenieria.sd.ecoembes.facade;
+package es.deusto.ingenieria.sd.plasSB.dao;
 
 import java.time.LocalDate;
 import java.util.List;

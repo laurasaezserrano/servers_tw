@@ -1,4 +1,4 @@
-package es.deusto.ingenieria.sd.ecoembes.facade;
+package es.deusto.ingenieria.sd.plasSB.dao;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
