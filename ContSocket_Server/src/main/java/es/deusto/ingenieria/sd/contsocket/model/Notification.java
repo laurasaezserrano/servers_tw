@@ -1,5 +1,5 @@
 package es.deusto.ingenieria.sd.contsocket.model;
 
-public class Notification {
+import java.time.LocalDate;
 
-}
+public record Notification(LocalDate date, int totalDumpsters, int totalContainers) { }
