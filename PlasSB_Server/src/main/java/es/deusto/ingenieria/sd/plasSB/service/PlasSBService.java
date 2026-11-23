@@ -3,7 +3,6 @@ package es.deusto.ingenieria.sd.plasSB.service;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import es.deusto.ingenieria.sd.plasSB.dao.CapacityRepository;

@@ -21,7 +21,9 @@ public class PlasSBController {
 
     private final PlasSBService service;
 
-    public PlasSBController(PlasSBService service) { this.service = service; }
+    public PlasSBController(PlasSBService service) { 
+    	this.service = service; 
+    }
 
     @GetMapping("/capacity")
     public ResponseEntity<CapacityDTO> getCapacity(@RequestParam LocalDate date) {

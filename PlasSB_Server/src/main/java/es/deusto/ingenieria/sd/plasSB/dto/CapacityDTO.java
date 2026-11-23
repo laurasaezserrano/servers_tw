@@ -6,6 +6,10 @@ public class CapacityDTO {
 	private LocalDate date;
     private double capacity; 
     
+    public CapacityDTO() {
+    	
+    }
+    
     public CapacityDTO(LocalDate date, double capacity) {
 		this.date = date;
 		this.capacity = capacity;

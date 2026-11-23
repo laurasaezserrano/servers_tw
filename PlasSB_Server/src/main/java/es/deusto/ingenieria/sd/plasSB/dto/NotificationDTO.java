@@ -7,6 +7,10 @@ public class NotificationDTO {
     private int numDumpsters;
     private int totalContainers;
     
+    public NotificationDTO() {
+    	
+    }
+    
     public NotificationDTO(LocalDate date, int numDumpsters, int totalContainers) {
     	this.date = date;
     	this.numDumpsters = numDumpsters;

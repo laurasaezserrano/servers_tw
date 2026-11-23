@@ -2,16 +2,20 @@ package es.deusto.ingenieria.sd.plasSB.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Capacity {
+	@Id
     private Long id;
-    private LocalDate date;
+    private LocalDate date;	
     private double capacity;
     
     public Capacity() {
 	}
     
-    public Capacity(Long id, LocalDate date, double capacity) {
-		this.id = id;
+    public Capacity(LocalDate date, double capacity) {
 		this.date = date;
 		this.capacity = capacity;
 	}

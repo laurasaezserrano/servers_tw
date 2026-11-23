@@ -2,7 +2,12 @@ package es.deusto.ingenieria.sd.plasSB.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Notification {
+	@Id
 	private Long id;
 	private LocalDate date;
 	private int numDumpsters;
