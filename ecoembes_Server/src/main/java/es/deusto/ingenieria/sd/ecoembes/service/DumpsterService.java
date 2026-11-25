@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterCreationDTO;
@@ -26,46 +25,19 @@ public class DumpsterService {
 		createExample("Gran Via 1, Bilbao", "48001", 10, 3, FillLevel.GREEN);
 		createExample("Calle Mayor 5, Bilbao", "48001", 10, 7, FillLevel.ORANGE);
 		createExample("Avenida Sabino Arana 10, Bilbao", "48013", 12, 12, FillLevel.RED);
-		
-		for (Dumpster d : dumpsters) {
-		    d.update(LocalDate.now().minusDays(2), 2, FillLevel.GREEN);
-		    d.update(LocalDate.now().minusDays(1), 5, FillLevel.ORANGE);
-		}
 		// End of CLAUDE examples
 		
 	}
 
 	private void createExample(String location, String postalCode, int capacity, int containers, FillLevel level) {
+		// Examples provided by CLAUDE
 		Dumpster dumpster = new Dumpster(nextId, location, postalCode, capacity);
+		dumpster.update(LocalDate.now().minusDays(2), 2, FillLevel.GREEN);
+		dumpster.update(LocalDate.now().minusDays(1), 5, FillLevel.ORANGE);
 		dumpster.update(LocalDate.now(), containers, level);
 		dumpsters.add(dumpster);
 		nextId++;
-	}
-
-	public DumpsterDTO createDumpster(FillLevel fillLevel, int numContainers, DumpsterDTO dto, Dumpster d) {
-		Dumpster dumpster = new Dumpster(nextId, dto.getLocation(), d.getPostalCode(), d.getCapacity());
-		dumpsters.add(dumpster);
-		nextId++;
-
-		return toDTO(dumpster);
-	}
-
-	//NEED CORRECTION
-	public boolean updateDumpster(long id, DumpsterDTO dto) {
-		Dumpster dumpster = findDumpster(id);
-		if (dumpster == null) {
-			return false;
-		}
-
-		FillLevel level;
-		try {
-			level = FillLevel.valueOf(dto.getFillLevel().name());
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
-
-		dumpster.update(LocalDate.now(), dto.getNumContainers(), level);
-		return true;
+		// End of CLAUDE examples
 	}
 
 	public List<DumpsterDTO> getAllDumpsters() {
@@ -128,7 +100,6 @@ public class DumpsterService {
 		return new DumpsterDTO(dumpster.getId(), dumpster.getLocation(), dumpster.getPostalCode(), dumpster.getCapacity(), dumpster.getContainers(), dumpster.getFillLevel());
 	}
 
-	//NEED CORRECTION
 	public DumpsterDTO createDumpster(DumpsterCreationDTO dumpsterCreationDTO) {
 		Dumpster dumpster = new Dumpster(nextId, dumpsterCreationDTO.getLocation(), dumpsterCreationDTO.getPostalCode(), dumpsterCreationDTO.getCapacity());
 		dumpster.update(LocalDate.now(), dumpsterCreationDTO.getNumContainers(), dumpsterCreationDTO.getFillLevel());

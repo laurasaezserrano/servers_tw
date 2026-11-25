@@ -10,6 +10,8 @@ import es.deusto.ingenieria.sd.ecoembes.entity.Assignment;
 import es.deusto.ingenieria.sd.ecoembes.entity.Dumpster;
 import es.deusto.ingenieria.sd.ecoembes.entity.Employee;
 import es.deusto.ingenieria.sd.ecoembes.entity.RecyclingPlant;
+import es.deusto.ingenieria.sd.ecoembes.gateway.IRecyclingPlantGateway;
+import es.deusto.ingenieria.sd.ecoembes.gateway.RecyclingPlantGatewayFactory;
 
 @Service
 public class AssignmentService {
@@ -44,7 +46,8 @@ public class AssignmentService {
 	    }
 
 	    LocalDate today = LocalDate.now();
-	    float capacity = plant.getCapacityByDate(today);
+	    IRecyclingPlantGateway gateway = RecyclingPlantGatewayFactory.getRecyclingPlantGateway(plantId);
+	    float capacity = gateway.getCapacity(today);
 	    Assignment assignment = new Assignment(nextId, today, plant, employee, selected);
 	    float neededTons = assignment.getTotalContainers() * TONS_PER_CONTAINER;
 
@@ -53,9 +56,8 @@ public class AssignmentService {
 	        return false;
 	    }
 
-	    // Update capacity, notify plant, and record assignment
-	    plant.setCapacity(today, capacity - neededTons);
-	    plant.notifyAssignment(assignment);
+	 // Notify external plant server and record assignment
+	    gateway.notifyAssignment(selected.size(), assignment.getTotalContainers(), today);
 	    assignments.add(assignment);
 	    nextId++;
 
