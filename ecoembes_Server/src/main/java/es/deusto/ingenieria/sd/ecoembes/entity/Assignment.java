@@ -24,6 +24,13 @@ public class Assignment {
 	public Assignment() {
 		this.dumpsters = new ArrayList<>();
 	}
+	
+	public Assignment(LocalDate date, RecyclingPlant plant, Employee employee, List<Dumpster> dumpsters) {
+		this.date = date;
+		this.plant = plant;
+		this.employee = employee;
+		this.dumpsters = dumpsters != null ? dumpsters : new ArrayList<>();
+	}
 
 	public Assignment(long id, LocalDate date, RecyclingPlant plant, Employee employee, List<Dumpster> dumpsters) {
 		this.id = id;

@@ -24,6 +24,13 @@ public class DumpsterUsage {
 		this.containers = containers;
 		this.fillLevel = fillLevel;
 	}
+	
+	public DumpsterUsage(long id, LocalDate date, int containers, FillLevel fillLevel) {
+		this.id = id;
+		this.date = date;
+		this.containers = containers;
+		this.fillLevel = fillLevel;
+	}
 
 	//GETTERS AND SETTERS
 	//Date

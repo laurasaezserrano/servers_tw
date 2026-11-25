@@ -24,6 +24,18 @@ public class RecyclingPlant {
 	private LocalDate date;
 
 	//CONSTRUCTORS
+	public RecyclingPlant() {
+		
+	}
+	
+	public RecyclingPlant(long id, String name, String location, float capacity, LocalDate date) {
+		this.id = id;
+		this.name = name;
+		this.location = location;
+		this.setCapacity(date, capacity);
+		this.date = date;
+	}
+	
 	public RecyclingPlant(String name, String location, float capacity, LocalDate date) {
 		this.name = name;
 		this.location = location;
@@ -38,7 +50,15 @@ public class RecyclingPlant {
 
 	
 	//GETTERS AND SETTERS
+	// ID
+	public long getId() {
+		return id;
+	}
 	
+	public void setId(long id) {
+		this.id = id;
+	}
+		
 	//Name
 	public String getName() { 
 		return name; 

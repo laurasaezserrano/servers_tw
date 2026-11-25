@@ -35,8 +35,24 @@ public class Dumpster {
 		this.capacity = capacity;
 	}
 	
+	public Dumpster(long id, String location, String postalCode, int capacity) {
+		this();
+		this.id = id;
+		this.location = location;
+		this.postalCode = postalCode;
+		this.capacity = capacity;
+	}
+	
 	//GETTERS AND SETTERS
-
+	// ID
+	public long getId() {
+		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
+	
 	//Location
 	public String getLocation() { 
 		return location; 
