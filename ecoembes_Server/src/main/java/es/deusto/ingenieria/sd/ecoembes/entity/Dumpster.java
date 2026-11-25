@@ -5,8 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Dumpster {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class Dumpster {
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String location;     
 	private String postalCode;
@@ -21,23 +28,14 @@ public class Dumpster {
 		this.fillLevel = FillLevel.GREEN;
 	}
 
-	public Dumpster(long id, String location, String postalCode, int capacity) {
+	public Dumpster(String location, String postalCode, int capacity) {
 		this();
-		this.id = id;
 		this.location = location;
 		this.postalCode = postalCode;
 		this.capacity = capacity;
 	}
 	
 	//GETTERS AND SETTERS
-	//Id
-	public long getId() { 
-		return id; 
-		}
-	
-	public void setId(long id) { 
-		this.id = id; 
-		}
 
 	//Location
 	public String getLocation() { 

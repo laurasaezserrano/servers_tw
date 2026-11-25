@@ -2,8 +2,15 @@ package es.deusto.ingenieria.sd.ecoembes.entity;
 
 import java.util.Objects;
 
-public class Employee {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class Employee {
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String name;
 	private String email;
@@ -12,22 +19,13 @@ public class Employee {
 	//CONSTRUCTORS
 	public Employee() { }
 
-	public Employee(long id, String name, String email, String password) {
-		this.id = id;
+	public Employee(String name, String email, String password) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 	}
 
 	//GETTERS AND SETTERS
-	//Id
-	public long getId() { 
-		return id; 
-		}
-	
-	public void setId(long id) { 
-		this.id = id; 
-		}
 	
 	//Name
 	public String getName() { 

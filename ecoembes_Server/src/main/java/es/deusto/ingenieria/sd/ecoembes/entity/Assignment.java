@@ -5,8 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Assignment {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class Assignment {
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private LocalDate date;
 	private RecyclingPlant plant;

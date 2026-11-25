@@ -2,8 +2,16 @@ package es.deusto.ingenieria.sd.ecoembes.entity;
 
 import java.time.LocalDate;
 
-public class DumpsterUsage {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class DumpsterUsage {
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 	private LocalDate date;
 	private int containers;
 	private FillLevel fillLevel;

@@ -7,8 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class RecyclingPlant {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class RecyclingPlant {
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String name;
 	private String location;
@@ -17,30 +24,20 @@ public class RecyclingPlant {
 	private LocalDate date;
 
 	//CONSTRUCTORS
-	public RecyclingPlant(long id, String name, String location, float capacity, LocalDate date) {
-		this.id = id;
+	public RecyclingPlant(String name, String location, float capacity, LocalDate date) {
 		this.name = name;
 		this.location = location;
 		this.setCapacity(date, capacity);
 		this.date = date;
 	}
 
-	public RecyclingPlant(long id, String name, String location) {
-		this.id = id;
+	public RecyclingPlant(String name, String location) {
 		this.name = name;
 		this.location = location;
 	}
 
 	
 	//GETTERS AND SETTERS
-	//Id
-	public long getId() { 
-		return id; 
-	}
-	
-	public void setId(long id) { 
-		this.id = id; 
-	}
 	
 	//Name
 	public String getName() { 
