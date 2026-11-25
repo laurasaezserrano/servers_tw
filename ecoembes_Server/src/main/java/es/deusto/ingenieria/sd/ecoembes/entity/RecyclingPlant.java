@@ -49,6 +49,12 @@ public class RecyclingPlant {
 	}
 
 	
+	public RecyclingPlant(int i, String name, String location) {
+		this.id = i;
+		this.name = name;
+		this.location = location;		
+	}
+
 	//GETTERS AND SETTERS
 	// ID
 	public long getId() {
