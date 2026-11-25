@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.deusto.ingenieria.sd.plasSB.dto.CapacityDTO;
 import es.deusto.ingenieria.sd.plasSB.dto.NotificationDTO;
 import es.deusto.ingenieria.sd.plasSB.service.PlasSBService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/plassb")

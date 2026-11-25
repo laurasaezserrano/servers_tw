@@ -3,12 +3,15 @@ package es.deusto.ingenieria.sd.plasSB.entity;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Capacity {
 	@Id
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
     private LocalDate date;	
     private double capacity;
     
@@ -40,7 +43,7 @@ public class Capacity {
 		return capacity;
 	}
 
-	public void setCapacityTons(double capacity) {
+	public void setCapacity(double capacity) {
 		this.capacity = capacity;
 	}
     
