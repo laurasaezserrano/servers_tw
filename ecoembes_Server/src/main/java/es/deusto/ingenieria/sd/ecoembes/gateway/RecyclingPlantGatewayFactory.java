@@ -1,17 +1,13 @@
 package es.deusto.ingenieria.sd.ecoembes.gateway;
 
 public class RecyclingPlantGatewayFactory {
-	
-	public static IRecyclingPlantGateway getRecyclingPlantGateway() {
-		if (System.getenv("RECYCLING_PLANT_GATEWAY") != null) {
-			String gateway = System.getenv("RECYCLING_PLANT_GATEWAY");
-			if (gateway.equals("PlasSB")) {
-				return new PlasSBServiceGateway();
-			} else if (gateway.equals("ContSocket")) {
-				return new ContSocketServiceGateway();
-			}
-		}
-		return null;
-	}
 
+	public static IRecyclingPlantGateway getRecyclingPlantGateway(long plantId) {
+		if (plantId == 1) {
+			return new PlasSBServiceGateway();
+		} else if (plantId == 2) {
+			return new ContSocketServiceGateway();
+		}
+		throw new IllegalArgumentException("Unknown recycling plant ID: " + plantId);
+	}
 }

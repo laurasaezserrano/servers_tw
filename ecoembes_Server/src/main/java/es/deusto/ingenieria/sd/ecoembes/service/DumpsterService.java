@@ -5,13 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterCreationDTO;
-//import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterCreationDTO;
 import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterDTO;
-//import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterUpdateDTO;
 import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterUsageDTO;
 import es.deusto.ingenieria.sd.ecoembes.entity.Dumpster;
 import es.deusto.ingenieria.sd.ecoembes.entity.DumpsterUsage;
@@ -79,33 +76,18 @@ public class DumpsterService {
 		return result;
 	}
 	
-	public ResponseEntity<Void> updateDumpster(long dumpsterId, FillLevel fillLevel, int numContainers) {
+	public void updateDumpster(long dumpsterId, FillLevel fillLevel, int numContainers) {
 	    Dumpster dumpster = findDumpster(dumpsterId);
 	    if (dumpster == null) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    	throw new IllegalArgumentException("Dumpster not found with ID: " + dumpsterId);   
 	    }
 	    if (numContainers < 0 || numContainers > dumpster.getCapacity()) {
-	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	        throw new IllegalArgumentException("Invalid number of containers: " + numContainers);
 	    }
 
-	    dumpster.update(LocalDate.now(), numContainers, fillLevel);
-	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    dumpster.update(LocalDate.now(), numContainers, fillLevel);	    
 	}
 
-	// Usage of a dumpster between two dates
-//	public ResponseEntity<List<DumpsterUsageDTO>> getDumpsterUsage(long id, LocalDate start, LocalDate end) {
-//		Dumpster dumpster = findDumpster(id);
-//		if (dumpster == null) {
-//			return ResponseEntity.notFound().build();
-//		}
-//
-//		List<DumpsterUsageDTO> result = new ArrayList<>();
-//		for (DumpsterUsage usage : dumpster.getUsageBetween(start, end)) {
-//			result.add(new DumpsterUsageDTO(usage.getDate(), usage.getContainers(), usage.getFillLevel()));
-//		}
-//		return ResponseEntity.ok(result);
-//	}
-	
 	public List<DumpsterUsageDTO> getDumpsterUsage(long id, LocalDate start, LocalDate end) {
 	    Dumpster dumpster = findDumpster(id);
 	    if (dumpster == null) {
