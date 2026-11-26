@@ -1,12 +1,9 @@
 package es.deusto.ingenieria.sd.contsocket.server;
 
-import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 import es.deusto.ingenieria.sd.contsocket.protocol.RequestProcessor;
 
@@ -22,21 +19,22 @@ public class ClientHandler implements Runnable {
         this.processor = processor;
     }
 
+
     @Override
     public void run() {
         try (Socket client = socket;
-             BufferedReader in = new BufferedReader(
-                     new InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
-             PrintWriter out = new PrintWriter(
-                     new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true)) {
+             DataInputStream in = new DataInputStream(client.getInputStream());
+             DataOutputStream out = new DataOutputStream(client.getOutputStream())) {
 
             client.setSoTimeout(TIMEOUT_MS); // a client that never sends anything cannot block the thread forever
-            String request = in.readLine();
+            
+            String request = in.readUTF();
             String response = processor.process(request);
-            out.println(response);
+            out.writeUTF(response);
+            out.flush();
 
         } catch (IOException e) {
-            System.err.println("Error with a client: " + e.getMessage());
+            System.err.println("Error with a client in ContSocket: " + e.getMessage());
         }
     }
 }
