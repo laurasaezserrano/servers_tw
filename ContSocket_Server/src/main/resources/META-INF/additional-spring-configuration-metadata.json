@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "capacity.default.tons",
+    "type": "java.lang.String",
+    "description": "A description for 'capacity.default.tons'"
+  },
+  {
+    "name": "capacity.days.in.advance",
+    "type": "java.lang.String",
+    "description": "A description for 'capacity.days.in.advance'"
+  }
+]}
