@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient; 
 
 @Entity
 public class RecyclingPlant {
@@ -19,8 +20,13 @@ public class RecyclingPlant {
 	private long id;
 	private String name;
 	private String location;
+	
+	@Transient
 	private Map<LocalDate, Float> capacityByDate = new HashMap<>();
+	
+	@Transient
 	private List<Assignment> assignments = new ArrayList<>();
+	
 	private LocalDate date;
 
 	//CONSTRUCTORS
@@ -48,7 +54,6 @@ public class RecyclingPlant {
 		this.location = location;
 	}
 
-	
 	public RecyclingPlant(int i, String name, String location) {
 		this.id = i;
 		this.name = name;
@@ -82,7 +87,6 @@ public class RecyclingPlant {
 	public void setLocation(String location) { 
 		this.location = location; 
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -119,5 +123,4 @@ public class RecyclingPlant {
     public void setDate(LocalDate date) {
 		this.date = date;
 	}
-    
 }
