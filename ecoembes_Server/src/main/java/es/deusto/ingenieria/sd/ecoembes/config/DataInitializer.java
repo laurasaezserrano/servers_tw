@@ -20,6 +20,7 @@ public class DataInitializer {
     @Bean
     CommandLineRunner initData(EmployeeRepository employeeRepo, DumpsterRepository dumpsterRepo, RecyclingPlantRepository plantRepo) {
         return args -> {
+            //If employee table is empty, add some initial employees
             if (employeeRepo.count() == 0) {
                 employeeRepo.save(new Employee("Laura", "laura@gmail.com", "1234"));
                 employeeRepo.save(new Employee("Carmen", "carmen@gmail.com", "1234"));
@@ -27,11 +28,22 @@ public class DataInitializer {
                 employeeRepo.save(new Employee("Jan", "jan@gmail.com", "1234"));
             }
 
+      	  // Store initial recycling plants if the table is empty
             if (plantRepo.count() == 0) {
-                plantRepo.save(new RecyclingPlant(1, "PlasSB Ltd.", "Bilbao"));
-                plantRepo.save(new RecyclingPlant(2, "ContSocket Ltd.", "Vitoria"));
+                RecyclingPlant plasSB = new RecyclingPlant();
+                plasSB.setName("PlasSB Ltd.");
+                plasSB.setLocation("Bilbao");
+                plasSB.setDate(LocalDate.now());
+                plantRepo.save(plasSB); // ID será 1 automáticamente
+
+                RecyclingPlant contSocket = new RecyclingPlant();
+                contSocket.setName("ContSocket Ltd.");
+                contSocket.setLocation("Vitoria");
+                contSocket.setDate(LocalDate.now());
+                plantRepo.save(contSocket); // ID será 2 automáticamente
             }
 
+            // Store initial dumpsters if the table is empty
             if (dumpsterRepo.count() == 0) {
                 Dumpster d1 = new Dumpster("Gran Via 1, Bilbao", "48001", 10);
                 d1.update(LocalDate.now(), 3, FillLevel.GREEN);
