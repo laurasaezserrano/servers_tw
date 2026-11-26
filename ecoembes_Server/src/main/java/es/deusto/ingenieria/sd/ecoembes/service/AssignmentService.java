@@ -3,9 +3,13 @@ package es.deusto.ingenieria.sd.ecoembes.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import es.deusto.ingenieria.sd.ecoembes.dao.AssignmentRepository;
+import es.deusto.ingenieria.sd.ecoembes.dao.DumpsterRepository;
+import es.deusto.ingenieria.sd.ecoembes.dao.RecyclingPlantRepository;
 import es.deusto.ingenieria.sd.ecoembes.entity.Assignment;
 import es.deusto.ingenieria.sd.ecoembes.entity.Dumpster;
 import es.deusto.ingenieria.sd.ecoembes.entity.Employee;
@@ -19,47 +23,54 @@ public class AssignmentService {
 	// Simulation:Suppose that each weighs 0.1 tons (Claude idea for the simulation)
 	private static final float TONS_PER_CONTAINER = 0.1f;
 
-	private DumpsterService dumpsterService;
-	private RecyclingPlantService plantService;
+	private final DumpsterRepository dumpsterRepository;
+	private final RecyclingPlantRepository plantRepository;
+	private final AssignmentRepository assignmentRepository;
+	private final RecyclingPlantGatewayFactory gatewayFactory;
 
-	private List<Assignment> assignments = new ArrayList<>();
-	private long nextId = 1;
-
-	public AssignmentService(DumpsterService dumpsterService, RecyclingPlantService plantService) {
-		this.dumpsterService = dumpsterService;
-		this.plantService = plantService;
+	public AssignmentService(DumpsterRepository dumpsterRepository, 
+			RecyclingPlantRepository plantRepository, 
+			AssignmentRepository assignmentRepository,
+			RecyclingPlantGatewayFactory gatewayFactory) {
+		this.dumpsterRepository = dumpsterRepository;
+		this.plantRepository = plantRepository;
+		this.assignmentRepository = assignmentRepository;
+		this.gatewayFactory = gatewayFactory;
 	}
 
 	public boolean assignDumpstersToPlant(long plantId, List<Long> dumpsterIds, Employee employee) {
-		RecyclingPlant plant = plantService.findPlant(plantId);
-	    if (plant == null || dumpsterIds == null || dumpsterIds.isEmpty()) {
+		// CORREGIDO: Búsqueda de la planta mediante el repositorio JPA
+		Optional<RecyclingPlant> plantOpt = plantRepository.findById(plantId);
+	    if (plantOpt.isEmpty() || dumpsterIds == null || dumpsterIds.isEmpty()) {
 	        return false;
 	    }
+	    RecyclingPlant plant = plantOpt.get();
 
+	    // CORREGIDO: Búsqueda de los contenedores utilizando el repositorio JPA
 	    List<Dumpster> selected = new ArrayList<>();
 	    for (Long id : dumpsterIds) {
-	        Dumpster dumpster = dumpsterService.findDumpster(id);
-	        if (dumpster == null) {
+	        Optional<Dumpster> dumpsterOpt = dumpsterRepository.findById(id);
+	        if (dumpsterOpt.isEmpty()) {
 	            return false;
 	        }
-	        selected.add(dumpster);
+	        selected.add(dumpsterOpt.get());
 	    }
 
 	    LocalDate today = LocalDate.now();
-	    IRecyclingPlantGateway gateway = RecyclingPlantGatewayFactory.getRecyclingPlantGateway(plantId);
+	    
+	    IRecyclingPlantGateway gateway = gatewayFactory.getRecyclingPlantGateway(plantId);
 	    float capacity = gateway.getCapacity(today);
-	    Assignment assignment = new Assignment(nextId, today, plant, employee, selected);
+	    
+	    Assignment assignment = new Assignment(today, plant, employee, selected);
 	    float neededTons = assignment.getTotalContainers() * TONS_PER_CONTAINER;
 
-	    // Check if plant has enough capacity
 	    if (neededTons > capacity) {
 	        return false;
 	    }
 
-	 // Notify external plant server and record assignment
 	    gateway.notifyAssignment(selected.size(), assignment.getTotalContainers(), today);
-	    assignments.add(assignment);
-	    nextId++;
+	    
+	    assignmentRepository.save(assignment);
 
 	    return true;
 	}
