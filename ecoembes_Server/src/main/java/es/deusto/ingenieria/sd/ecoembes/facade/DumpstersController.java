@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterCreationDTO;
 import es.deusto.ingenieria.sd.ecoembes.dto.DumpsterDTO;
@@ -31,9 +32,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-//CLAUDE SOLUTION for return a float (capacity) instead of ResponseEntity<Float> in getRecyclingPlantCapacity method
-import org.springframework.web.server.ResponseStatusException;
-
 @RestController
 @RequestMapping("/dumpsters")
 @Tag(name = "Dumpsters and Recycling Plants", description = "Operations related to dumpsters and recycling plants")
@@ -43,7 +41,6 @@ public class DumpstersController {
     private final RecyclingPlantService plantService;
     private final AssignmentService assignmentService;
     private final AuthService authService;
-
 	
 	public DumpstersController(DumpsterService dumpsterService, RecyclingPlantService plantService, AssignmentService assignmentService, AuthService authService) {
 		this.dumpsterService = dumpsterService;
@@ -62,156 +59,74 @@ public class DumpstersController {
 	        })
     @PutMapping("/{dumpsterId}/status")
     public ResponseEntity<Void> updateDumpster( 
-	    @Parameter(name = "dumpsterId", description = "Unique identifier of the dumpster", required = true)
 	    @PathVariable("dumpsterId") long dumpsterId,
-	    @Parameter(name = "token", description = "Session token of the authenticated employee (obtained at login)", required = true)
         @RequestParam("token") String token,
-        @Parameter(name = "fillLevel", description = "New fill level of the dumpster (GREEN = almost empty, ORANGE = almost full, RED = full)", required = true)
         @RequestParam("fillLevel") FillLevel fillLevel,
-        @Parameter(name = "numContainers", description = "New number of containers in the dumpster", required = true)
         @RequestParam("numContainers") int numContainers) {
 		
 		if (authService.getEmployeeByToken(token).isEmpty()) {
 		    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		return dumpsterService.updateDumpster(dumpsterId, fillLevel, numContainers);
-	    
+		dumpsterService.updateDumpster(dumpsterId, fillLevel, numContainers);
+	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //POST create a new dumpster
-    @Operation(
-		summary = "Create a new dumpster", 
-		description = "Creates a new dumpster with the specified fill level and number of containers.",
-		responses = {
-			@ApiResponse(responseCode = "201", description = "Dumpster created successfully"),
-			@ApiResponse(responseCode = "401", description = "Unauthorized access - invalid token"),
-			@ApiResponse(responseCode = "400", description = "Bad request - invalid dumpster data")
-			})
-    
     @PostMapping("/new-dumpster")
     public ResponseEntity<DumpsterDTO> createDumpster(
-    		@Parameter(name = "token", description = "Session token of the authenticated employee (obtained at login)", required = true)
             @RequestParam("token") String token,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                description = "Information about the dumpster to be created", required = true)
             @RequestBody DumpsterCreationDTO dto){
     	
     	Optional<Employee> employee = authService.getEmployeeByToken(token);
-    	
     	if (employee.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
     	
     	DumpsterDTO newDumpster = dumpsterService.createDumpster(dto);
-		
 		return new ResponseEntity<>(newDumpster, HttpStatus.CREATED);
-    	
     }
 
-    
-    //GET all dumpsters
-    @Operation(
-    	summary = "Get all dumpsters", 
-    	description = "Returns a list of all dumpsters in the system.",
-    	responses = {
-			@ApiResponse(responseCode = "200", description = "Successfully retrieved list of dumpsters"),
-			@ApiResponse(responseCode = "401", description = "Unauthorized access - invalid token")
-		})
-    
     @GetMapping("/all-dumpsters")
-    public ResponseEntity<List<DumpsterDTO>> getAllDumpsters(
-    		@Parameter(name = "token", description = "Session token of the authenticated employee (obtained at login)", required = true)
-    		@RequestParam("token") String token) {
-    	
-    	// get all dumpsters possibly with authentication check
-		Optional<Employee> employee = authService.getEmployeeByToken(token);
-
-		if (employee.isEmpty()) {
+    public ResponseEntity<List<DumpsterDTO>> getAllDumpsters(@RequestParam("token") String token) {
+		if (authService.getEmployeeByToken(token).isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-
 		List<DumpsterDTO> dumpsters = dumpsterService.getAllDumpsters();
 		return new ResponseEntity<>(dumpsters, HttpStatus.OK);
     }
 
-    //GET dumpster usage data
-    @Operation(
-		summary = "Get dumpster usage", 
-		description = "Returns the usage data for a specific dumpster within a given date range.",
-		responses =  {
-			@ApiResponse(responseCode = "200", description = "Successfully retrieved dumpster usage data"),
-			@ApiResponse(responseCode = "401", description = "Unauthorized access - invalid token"),
-			@ApiResponse(responseCode = "404", description = "Dumpster not found")
-		})
-    
     @GetMapping("/{dumpsterId}/usage")
     public ResponseEntity<List<DumpsterUsageDTO>> getDumpsterUsage(
-			@Parameter(name = "dumpsterId", description = "Unique identifier of the dumpster", required = true)
 			@PathVariable("dumpsterId") long dumpsterId,
-			@Parameter(name = "token", description = "Session token of the authenticated employee (obtained at login)", required = true)
 			@RequestParam("token") String token,
-			@Parameter(name = "startDate", description = "Start of the period (ISO format yyyy-MM-dd)", required = true)
 			@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-			@Parameter(name = "endDate", description = "End of the period (ISO format yyyy-MM-dd)", required = true)
 			@RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
  
 		if (authService.getEmployeeByToken(token).isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
- 
 		if (startDate.isAfter(endDate)) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
- 
 		List<DumpsterUsageDTO> usage = dumpsterService.getDumpsterUsage(dumpsterId, startDate, endDate);
- 
 		if (usage == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
- 
 		return new ResponseEntity<>(usage, HttpStatus.OK);
 	}
     
-    //GET all recycling plants
-    @Operation(
-    	summary = "Get recycling plants",
-    	description = "Returns a list of all recycling plants in the system.",
-    	responses = {
-			@ApiResponse(responseCode = "200", description = "Successfully retrieved list of recycling plants"),
-			@ApiResponse(responseCode = "401", description = "Unauthorized access - invalid token")
-					})
     @GetMapping("/recycling-plants")
-    public ResponseEntity<List<RecyclingPlantDTO>> getRecyclingPlants(
-    		@Parameter(name = "token", description = "Session token of the authenticated employee (obtained at login)", required = true)
-    		@RequestParam("token") String token) {
-    	
-		Optional<Employee> employee = authService.getEmployeeByToken(token);
-
-		if (employee.isEmpty()) {
+    public ResponseEntity<List<RecyclingPlantDTO>> getRecyclingPlants(@RequestParam("token") String token) {
+		if (authService.getEmployeeByToken(token).isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-
 		return new ResponseEntity<>(plantService.getAllPlants(), HttpStatus.OK);
 	}
     
-    //GET recycling plant capacity
-    @Operation(
-		summary = "Get recycling plant capacity",
-		description = "Returns the capacity of a specific recycling plant.",
-		responses = {
-			@ApiResponse(responseCode = "200", description = "Successfully retrieved recycling plant capacity"),
-			@ApiResponse(responseCode = "401", description = "Unauthorized access - invalid token"),
-			@ApiResponse(responseCode = "404", description = "Recycling plant not found")
-		})
-    
     @GetMapping("/recycling-plants/{plantId}/capacity")
     public float getRecyclingPlantCapacity(
-            @Parameter(name = "plantId", description = "Unique identifier of the recycling plant", required = true)
             @PathVariable("plantId") long plantId,
-            @Parameter(name = "token", description = "Session token of the authenticated employee (obtained at login)", required = true)
             @RequestParam("token") String token,
-            @Parameter(name = "date", description = "Date for which the capacity is requested (ISO format yyyy-MM-dd)", required = true)
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         if (authService.getEmployeeByToken(token).isEmpty()) {
@@ -224,24 +139,10 @@ public class DumpstersController {
         return capacity;
     }
     
-    //POST assign dumpsters to recycling plant
-    @Operation(
-    	summary = "Assign dumpsters to recycling plant",
-    	description = "Assigns a list of dumpsters to a specific recycling plant.",
-    	responses = {
-				@ApiResponse(responseCode = "204", description = "Successfully assigned dumpsters to recycling plant"),
-				@ApiResponse(responseCode = "400", description = "Bad request - invalid dumpster IDs or plant ID"),
-				@ApiResponse(responseCode = "401", description = "Unauthorized access - invalid token")
-					})
-    
     @PostMapping("/recycling-plants/{plantId}/dumpsters")
     public ResponseEntity<Void> assignDumpstersToPlant(
-            @Parameter(name = "plantId", description = "Unique identifier of the recycling plant", required = true)
             @PathVariable("plantId") long plantId,
-            @Parameter(name = "token", description = "Session token of the authenticated employee (obtained at login)", required = true)
             @RequestParam("token") String token,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                description = "List of dumpster IDs to assign to the plant", required = true)
             @RequestBody List<Long> dumpsterIds) {
 
         Optional<Employee> employee = authService.getEmployeeByToken(token);
@@ -255,22 +156,10 @@ public class DumpstersController {
         return new ResponseEntity<>(success ? HttpStatus.NO_CONTENT : HttpStatus.BAD_REQUEST);
     }
     
-    // Check dumpster status
-    @Operation(summary = "Check dumpster status",
-    	    description = "Dumpsters in a postal code area on a given day.",
-    	    responses = {
-    	    		@ApiResponse(responseCode = "200", description = "Successfully retrieved dumpster status"),
-    	    		@ApiResponse(responseCode = "401", description = "Unauthorized access - invalid token"),
-    	    		@ApiResponse(responseCode = "404", description = "No dumpsters found for the given postal code and date")}
-    	    )
-    
     @GetMapping("/status")
     public ResponseEntity<FillLevel> getDumpstersStatus(
-            @Parameter(name = "token", description = "Session token of the authenticated employee (obtained at login)", required = true)
             @RequestParam("token") String token,
-            @Parameter(name = "postalCode", description = "Postal code of the area", required = true)
             @RequestParam("postalCode") String postalCode,
-            @Parameter(name = "date", description = "Day of the query (ISO format yyyy-MM-dd)", required = true)
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         if (authService.getEmployeeByToken(token).isEmpty()) {
@@ -282,5 +171,4 @@ public class DumpstersController {
         }
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
-    
 }

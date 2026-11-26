@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Assignment {
@@ -16,11 +18,16 @@ public class Assignment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private LocalDate date;
+
+	@ManyToOne
 	private RecyclingPlant plant;
+	
+	@ManyToOne
 	private Employee employee;
+	
+	@ManyToMany
 	private List<Dumpster> dumpsters;
 	
-	//CONSTRUCTORS
 	public Assignment() {
 		this.dumpsters = new ArrayList<>();
 	}
@@ -40,53 +47,23 @@ public class Assignment {
 		this.dumpsters = dumpsters != null ? dumpsters : new ArrayList<>();
 	}
 	
-	//GETTERS AND SETTERS
-	//Id
-	public long getId() { 
-		return id; 
-		}
+	public long getId() { return id; }
+	public void setId(long id) { this.id = id; }
 	
-	public void setId(long id) { 
-		this.id = id; 
-		}
+	public LocalDate getDate() { return date; }
+	public void setDate(LocalDate date) { this.date = date; }
 	
-	//Date
-	public LocalDate getDate() { 
-		return date; 
-		}
-	
-	public void setDate(LocalDate date) { 
-		this.date = date; 
-		}
-	
-	//Plant
-	public RecyclingPlant getPlant() { 
-		return plant; 
-		}
-	
-	public void setPlant(RecyclingPlant plant) { 
-		this.plant = plant; 
-		}
+	public RecyclingPlant getPlant() { return plant; }
+	public void setPlant(RecyclingPlant plant) { this.plant = plant; }
 
-	//Employee
-	public Employee getEmployee() { 
-		return employee; 
-		}
-	
-	public void setEmployee(Employee employee) { 
-		this.employee = employee; 
-		}
+	public Employee getEmployee() { return employee; }
+	public void setEmployee(Employee employee) { this.employee = employee; }
 
-	//Dumpsters
-	public List<Dumpster> getDumpsters() { 
-		return dumpsters; 
-		}
-	
+	public List<Dumpster> getDumpsters() { return dumpsters; }
 	public void setDumpsters(List<Dumpster> dumpsters) {
 		this.dumpsters = dumpsters != null ? dumpsters : new ArrayList<>();
 	}
 	
-	// Auxiliary methods for dumpsters
 	public int getTotalDumpsters() { return dumpsters.size(); }
 
 	public int getTotalContainers() {

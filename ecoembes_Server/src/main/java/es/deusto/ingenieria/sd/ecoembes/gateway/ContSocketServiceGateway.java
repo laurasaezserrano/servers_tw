@@ -5,18 +5,24 @@ import java.io.DataOutputStream;
 import java.net.Socket;
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
 public class ContSocketServiceGateway implements IRecyclingPlantGateway {
 	
-	private static final String HOST = "localhost";
-	private static final int PORT = 9000;
+	@Value("${contsocket.host}")
+	private String host;
+	
+	@Value("${contsocket.port}")
+	private int port;
 	
 	@Override
 	public float getCapacity(LocalDate date) {
-		try (Socket socket = new Socket(HOST, PORT);
+		try (Socket socket = new Socket(host, port);
 				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 				DataInputStream in = new DataInputStream(socket.getInputStream())) {
 
-			// Adjust delimiter/command to match what your ContSocket server parses
 			out.writeUTF("GET_CAPACITY#" + date.toString());
 			String response = in.readUTF();
 			return Float.parseFloat(response);
@@ -28,16 +34,14 @@ public class ContSocketServiceGateway implements IRecyclingPlantGateway {
 
 	@Override
 	public void notifyAssignment(int totalDumpsters, int totalContainers, LocalDate date) {
-		try (Socket socket = new Socket(HOST, PORT);
+		try (Socket socket = new Socket(host, port);
 				 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 				 DataInputStream in = new DataInputStream(socket.getInputStream())) {
 
-			// Adjust delimiter/command to match what your ContSocket server parses
 			out.writeUTF("NOTIFY_ASSIGNMENT#" + totalDumpsters + "#" + totalContainers + "#" + date.toString());
-			in.readUTF(); // Wait for server acknowledgement (e.g., "OK")
+			in.readUTF();
 		} catch (Exception e) {
 			System.err.println("Error notifying assignment to ContSocket: " + e.getMessage());
 		}	
 	}
-
 }

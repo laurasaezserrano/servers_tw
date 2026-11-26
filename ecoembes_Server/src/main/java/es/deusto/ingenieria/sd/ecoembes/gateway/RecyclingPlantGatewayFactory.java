@@ -1,12 +1,23 @@
 package es.deusto.ingenieria.sd.ecoembes.gateway;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class RecyclingPlantGatewayFactory {
 
-	public static IRecyclingPlantGateway getRecyclingPlantGateway(long plantId) {
+	private final PlasSBServiceGateway plasSBGateway;
+	private final ContSocketServiceGateway contSocketGateway;
+
+	public RecyclingPlantGatewayFactory(PlasSBServiceGateway plasSBGateway, ContSocketServiceGateway contSocketGateway) {
+		this.plasSBGateway = plasSBGateway;
+		this.contSocketGateway = contSocketGateway;
+	}
+
+	public IRecyclingPlantGateway getRecyclingPlantGateway(long plantId) {
 		if (plantId == 1) {
-			return new PlasSBServiceGateway();
+			return plasSBGateway;
 		} else if (plantId == 2) {
-			return new ContSocketServiceGateway();
+			return contSocketGateway;
 		}
 		throw new IllegalArgumentException("Unknown recycling plant ID: " + plantId);
 	}
