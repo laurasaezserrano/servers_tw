@@ -57,7 +57,7 @@ public class DumpstersController {
 	         @ApiResponse(responseCode = "400", description = "Bad request - invalid fill level or number of containers"),
 	         @ApiResponse(responseCode = "404", description = "Dumpster not found")
 	        })
-    @PutMapping("/{dumpsterId}/status")
+    @PostMapping("/{dumpsterId}/status")
     public ResponseEntity<Void> updateDumpster( 
 	    @PathVariable("dumpsterId") long dumpsterId,
         @RequestParam("token") String token,
