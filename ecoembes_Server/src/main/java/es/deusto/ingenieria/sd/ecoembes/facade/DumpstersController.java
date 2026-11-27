@@ -28,7 +28,6 @@ import es.deusto.ingenieria.sd.ecoembes.service.AuthService;
 import es.deusto.ingenieria.sd.ecoembes.service.DumpsterService;
 import es.deusto.ingenieria.sd.ecoembes.service.RecyclingPlantService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
