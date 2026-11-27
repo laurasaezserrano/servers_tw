@@ -1,47 +1,56 @@
 package es.deusto.ingenieria.sd.ecoembes.gateway;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-@Component
 public class ContSocketServiceGateway implements IRecyclingPlantGateway {
-	
-	@Value("${contsocket.host}")
-	private String host;
-	
-	@Value("${contsocket.port}")
-	private int port;
-	
+
+	private static final int TIMEOUT_MS = 5000;
+
+	private final String host;
+	private final int port;
+
+	public ContSocketServiceGateway(String host, int port) {
+		this.host = host;
+		this.port = port;
+	}
+
 	@Override
 	public float getCapacity(LocalDate date) {
-		try (Socket socket = new Socket(host, port);
-				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-				DataInputStream in = new DataInputStream(socket.getInputStream())) {
-
-			out.writeUTF("GET_CAPACITY#" + date.toString());
-			String response = in.readUTF();
-			return Float.parseFloat(response);
-		} catch (Exception e) {
-			System.err.println("Error getting capacity from ContSocket: " + e.getMessage());
-			return 0f;
+		String[] parts = send("GET_CAPACITY;" + date); 
+		if (parts.length < 2) {
+			throw new IllegalStateException("Invalid response from ContSocket");
 		}
+		return Float.parseFloat(parts[1]);
 	}
 
 	@Override
 	public void notifyAssignment(int totalDumpsters, int totalContainers, LocalDate date) {
-		try (Socket socket = new Socket(host, port);
-				 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-				 DataInputStream in = new DataInputStream(socket.getInputStream())) {
+		send("NOTIFY;" + date + ";" + totalDumpsters + ";" + totalContainers);   // respuesta: OK
+	}
 
-			out.writeUTF("NOTIFY_ASSIGNMENT#" + totalDumpsters + "#" + totalContainers + "#" + date.toString());
-			in.readUTF();
-		} catch (Exception e) {
-			System.err.println("Error notifying assignment to ContSocket: " + e.getMessage());
-		}	
+	private String[] send(String request) {
+		try (Socket socket = new Socket()) {
+			socket.connect(new InetSocketAddress(host, port), TIMEOUT_MS);
+			socket.setSoTimeout(TIMEOUT_MS);
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true, StandardCharsets.UTF_8);
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+
+			out.println(request);
+			String response = in.readLine();
+			if (response == null || !response.startsWith("OK")) {
+				throw new IllegalStateException("ContSocket error: " + response);
+			}
+			return response.split(";");
+		} catch (IOException e) {
+			throw new IllegalStateException("ContSocket not available: " + e.getMessage(), e);
+		}
 	}
 }
